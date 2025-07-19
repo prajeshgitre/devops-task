@@ -238,7 +238,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest # <-- Sample Image
+        image: nginx:latest 
         ports:
         - containerPort: 80
 ```
@@ -257,7 +257,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 30080
+      nodePort: 30081
   type: NodePort
 ```
 
