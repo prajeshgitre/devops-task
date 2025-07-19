@@ -363,7 +363,7 @@ Add the screenshots like:
 
 ```markdown
 ### Argo CD Dashboard
-![Homepage Preview](image-2.png)
+devops-task/image-1.png
 
 ### NGINX Pods Running
 
