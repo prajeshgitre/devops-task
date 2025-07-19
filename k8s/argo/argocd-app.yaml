@@ -10,7 +10,7 @@ spec:
     targetRevision: main
     path: 'k8s/deployment'
   destination:
-    server: 'arn:aws:eks:ap-south-1:816615254284:cluster/test-ekc-cluster'
+    server: 'https://kubernetes.default.svc'
     namespace: argocd
   syncPolicy:
     automated:
