@@ -131,9 +131,6 @@ userpolicy     = "testuser-access-policy"
 
 ## 📊 Architecture Diagram
 
-![AWS EKS Architecture](./architecture.png)
-
-*If not available: replace `architecture.png` with a generated image or diagram.*
 
 This infrastructure sets up:
 
@@ -154,114 +151,81 @@ terraform destroy
 
 ---
 
-## ✅ Validation Checklist
+Here’s a complete and structured `README.md` file tailored to your **EKS deployment**, **manual Nginx deployment**, and **Argo CD-based deployment** of Nginx — with **image placeholders** and explanations:
 
-* [x] VPC created with public/private subnets
-* [x] EKS cluster reachable via kubectl
-* [x] Worker nodes join the cluster
-* [x] IAM user created and policy attached
-
-
----
-Here’s a complete and professional `README.md` file tailored to help you deploy a **Nginx application on GKE using Argo CD**, assuming your GKE cluster is already up and running.
+> ✅ Make sure your images like `argocd_dashboard.png` and others are located in the `images/` folder as you described.
 
 ---
 
-# 🚀 NGINX Deployment on GKE using Argo CD
+```markdown
+# 🚀 EKS Deployment with Manual and Argo CD-based NGINX App
 
-This repository contains resources and instructions to deploy a sample NGINX application to **Google Kubernetes Engine (GKE)** using **Argo CD** for GitOps-style continuous deployment.
-
----
-
-## 📋 Prerequisites
-
-Before proceeding, ensure you have the following:
-
-### ✅ Tools Installed
-
-* [kubectl](https://kubernetes.io/docs/tasks/tools/)
-* [gcloud CLI](https://cloud.google.com/sdk/docs/install)
-* [helm](https://helm.sh/docs/intro/install/)
-* [Argo CD CLI (optional)](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
-* [Git](https://git-scm.com/downloads)
-
-### ✅ GKE Cluster
-
-* A running GKE cluster with your kubeconfig set:
-
-  ```bash
-  gcloud container clusters get-credentials <cluster-name> --region <region>
-  ```
+This project sets up an EKS cluster using Terraform and deploys a sample NGINX application in two ways:
+1. Manual deployment using `kubectl`
+2. GitOps deployment using Argo CD
 
 ---
 
-## 🛠️ Step-by-Step Guide
+## 📌 Prerequisites
 
-### 1. ✅ Clone This Repository
-
-```bash
-git clone https://github.com/your-org/argocd-nginx-on-gke.git
-cd argocd-nginx-on-gke
-```
-
-### 2. 🚀 Install Argo CD on GKE
-
-Create a namespace and install Argo CD via Helm or manifests.
-
-```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-> 📌 **Note**: You can also install Argo CD using Helm if preferred.
-
-### 3. 🔐 Get Argo CD Admin Password
-
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-```
-
-### 4. 🌐 Expose Argo CD Server
-
-To access Argo CD UI externally (temporary):
-
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
-Access it via: [https://localhost:8080](https://localhost:8080)
-
-> Login with username: `admin` and the password from the previous step.
+- AWS CLI configured (`aws configure`)
+- Terraform installed
+- `kubectl` installed and configured with your EKS cluster
+- Argo CD CLI installed (`argocd`)
+- GitHub repo containing your manifests
 
 ---
 
-## 📦 Application Deployment Files
+## 📁 Folder Structure
 
-### 1. Create Application Namespace
+```
+
+.
+├── images/
+│   ├── nginx\_nodeport
+│   ├── argocd\_dashboard.png
+│   └── nginx\_app\_synced.png
+├── k8s/
+│   └── deployment/
+│       ├── deployment.yaml
+│       └── service.yaml
+├── argo/
+│   └── argocd-app.yaml
+├── terraform/
+│   ├── main.tf
+│   ├── variable.tf
+│   ├── provider.tf
+│   ├── output.tf
+│   └── testuser-policy.json
+└── README.md
+
+````
+
+---
+
+## ☸️ Step 1: Create EKS Cluster via Terraform
 
 ```bash
-kubectl create namespace nginx-app
-```
+cd terraform/
+terraform init
+terraform apply
+````
 
-### 2. Application Manifest Structure
+This will create the EKS cluster and required IAM policies.
 
-Create the following folder structure:
+---
 
-```
-nginx-app/
-├── deployment.yaml
-├── service.yaml
-├── kustomization.yaml
-```
+## 🌐 Step 2: Manual Deployment of NGINX using NodePort
 
-#### `deployment.yaml`
+Create a sample NGINX app and expose it manually:
+
+**deployment.yaml**
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
-  namespace: nginx-app
+  name: nginx-deployment
 spec:
   replicas: 2
   selector:
@@ -274,126 +238,130 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: nginx:latest # <-- Sample Image
         ports:
         - containerPort: 80
 ```
 
-#### `service.yaml`
+**service.yaml**
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
-  namespace: nginx-app
 spec:
   selector:
     app: nginx
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: LoadBalancer
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+  type: NodePort
 ```
 
-#### `kustomization.yaml`
+Apply these:
+
+```bash
+kubectl apply -f k8s/deployment/deployment.yaml
+kubectl apply -f k8s/deployment/service.yaml
+```
+
+Access via port forwarding or node public IP.
+
+![Manual NGINX NodePort UI](images/nginx_nodeport_ui.png)
+
+---
+
+## 🚀 Step 3: Install Argo CD on EKS
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+---
+
+## 🔧 Step 4: Install Argo CD CLI
+
+```bash
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
+```
+
+---
+
+## 🌐 Step 5: Expose Argo CD API via LoadBalancer
+
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+```
+
+Wait a few minutes for the external IP.
+
+![Argo CD Exposed](images/argocd_dashboard.png)
+
+---
+
+## 🔐 Step 6: Login to Argo CD
+
+Get initial password:
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Login:
+
+```bash
+argocd login <ARGO_SERVER> --username admin --password <PASSWORD>
+```
+
+---
+
+## 📦 Step 7: Deploy NGINX via Argo CD (GitOps)
+
+**Create Argo CD Application**
+
+`argo/argocd-app.yaml`
 
 ```yaml
-resources:
-  - deployment.yaml
-  - service.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app
+  namespace: argocd
+spec:
+  project: devops
+  source:
+    repoURL: 'https://github.com/prajeshgitre/devops-task.git'
+    targetRevision: main
+    path: 'k8s/deployment'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - PrunePropagationPolicy=foreground
 ```
 
----
-
-## 🔧 Configure Argo CD Application
-
-Once Argo CD is installed and accessible, configure your application.
-
-### Option 1: Web UI
-
-* Login to Argo CD UI
-* Click **New App**
-* Fill:
-
-  * **Application Name**: `nginx`
-  * **Project**: `default`
-  * **Sync Policy**: Manual or Automatic
-  * **Repository URL**: Git repo URL
-  * **Path**: `k8s/argo`
-  * **Cluster**: `https://kubernetes.default.svc`
-  * **Namespace**: `nginx-app`
-* Click **Create**
-
-### Option 2: Using CLI
+Apply:
 
 ```bash
-argocd app create nginx \
-  --repo https://github.com/your-org/argocd-nginx-on-gke.git \
-  --path nginx-app \
-  --dest-server https://kubernetes.default.svc \
-  --dest-namespace nginx-app
+kubectl apply -f argo/argocd-app.yaml
 ```
 
-Sync it:
+Once synced, your app will be deployed automatically by Argo CD.
 
-```bash
-argocd app sync nginx
-```
+![NGINX Synced in Argo CD](images/nginx_app_synced.png)
 
----
+-
 
-## ✅ Verify Deployment
-
-Check resources:
-
-```bash
-kubectl get pods -n nginx-app
-kubectl get svc -n nginx-app
-```
-
-Access NGINX via external IP (from LoadBalancer service).
-
----
-
-## 📸 Recommended Screenshot Suggestions
-
-Add the screenshots like:
-
-```markdown
-### Argo CD Dashboard
-![ArgoCD Dashboard](images/argocd_dashboard.png)
-### NGINX Pods Running
-
-### NGINX Page
-
-
-## 🧼 Cleanup
-
-```bash
-kubectl delete namespace nginx-app
-argocd app delete nginx
-```
-
----
-
-## 📘 References
-
-* [Argo CD Documentation](https://argo-cd.readthedocs.io/)
-* [GKE Documentation](https://cloud.google.com/kubernetes-engine/docs)
-* [Kustomize](https://kubectl.docs.kubernetes.io/references/kustomize/)
-
----
-
-Let me know if you want this turned into a downloadable `README.md` file or need help with Git setup!
-
-
-This project is licensed under the MIT License.
-
-```
-
----
-
-Would you also like me to generate and send the architecture diagram image (`architecture.png`) mentioned above?
-```
+``
