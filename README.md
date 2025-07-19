@@ -93,8 +93,8 @@ userpolicy     = "testuser-access-policy"
 1. **Clone the repo**
 
    ```bash
-   git clone <your-repo-url>
-   cd <repo-directory>
+   git https://github.com/prajeshgitre/devops-task.git
+   cd devops-tasks/terraform
    ```
 
 2. **Initialize Terraform**
@@ -149,15 +149,7 @@ To destroy all provisioned resources:
 terraform destroy
 ```
 
----
 
-Here’s a complete and structured `README.md` file tailored to your **EKS deployment**, **manual Nginx deployment**, and **Argo CD-based deployment** of Nginx — with **image placeholders** and explanations:
-
-> ✅ Make sure your images like `argocd_dashboard.png` and others are located in the `images/` folder as you described.
-
----
-
-```markdown
 # 🚀 EKS Deployment with Manual and Argo CD-based NGINX App
 
 This project sets up an EKS cluster using Terraform and deploys a sample NGINX application in two ways:
