@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/prajeshgitre/devops-task.git'
     targetRevision: main
-    path: 'k8s/deployement'
+    path: 'k8s/deployment'
   destination:
     server: 'arn:aws:eks:ap-south-1:816615254284:cluster/test-ekc-cluster'
     namespace: argocd
@@ -16,7 +16,7 @@ spec:
     automated:
       prune: true
       selfHeal: true
-        syncOptions:
+    syncOptions:
       - CreateNamespace=true #If the namespace is not present, this will create a specified namespace in the cluster
       - PruneLast=true
-      - PrunePropagationPolicy=foreground  
+      - PrunePropagationPolicy=foreground
