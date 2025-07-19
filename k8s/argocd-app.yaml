@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app
+  namespace: argocd
+spec:
+  project: devops
+  source:
+    repoURL: 'https://github.com/prajeshgitre/devops-task.git'
+    targetRevision: main
+    path: 'k8s/deployement'
+  destination:
+    server: 'arn:aws:eks:ap-south-1:816615254284:cluster/test-ekc-cluster'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+        syncOptions:
+      - CreateNamespace=true #If the namespace is not present, this will create a specified namespace in the cluster
+      - PruneLast=true
+      - PrunePropagationPolicy=foreground  
