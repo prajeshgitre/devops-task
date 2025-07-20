@@ -114,6 +114,7 @@ userpolicy     = "testuser-access-policy"
    ```bash
    terraform apply
    ```
+![eks_cluster](https://github.com/prajeshgitre/devops-task/blob/3fba88c988bc89bb690f47057adcdb7e0d4e2402/images/eks_cluster.png)   
 
 5. **Get EKS Credentials**
 
@@ -127,27 +128,7 @@ userpolicy     = "testuser-access-policy"
    kubectl get nodes
    ```
 
----
 
-## 📊 Architecture Diagram
-
-
-This infrastructure sets up:
-
-* A VPC with public and private subnets
-* A managed EKS cluster
-* A managed node group
-* IAM user with attached policy
-
----
-
-## 🛑 Destroy Resources
-
-To destroy all provisioned resources:
-
-```bash
-terraform destroy
-```
 
 
 # 🚀 EKS Deployment with Manual and Argo CD-based NGINX App
