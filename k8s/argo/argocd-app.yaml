@@ -17,6 +17,6 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true #If the namespace is not present, this will create a specified namespace in the cluster
+      - CreateNamespace=true 
       - PruneLast=true
       - PrunePropagationPolicy=foreground
