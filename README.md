@@ -244,7 +244,7 @@ kubectl apply -f k8s/deployment/service.yaml
 
 Access via port forwarding or node public IP.
 
-![nginx_deployement_nodeport](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployement_nodeport.png)
+![nginx_deployment](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployment.png)
 
 
 ## 🚀 Step 3: Install Argo CD on EKS
@@ -333,7 +333,7 @@ kubectl apply -f argo/argocd-app.yaml
 
 Once synced, your app will be deployed automatically by Argo CD.
 
-![nginx_deployment](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployment.png)
+![nginx_deployement_nodeport](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployement_nodeport.png)
 
 -
 
