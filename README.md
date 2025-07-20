@@ -107,13 +107,14 @@ userpolicy     = "testuser-access-policy"
 
    ```bash
    terraform plan
-   ```
+![terraform_plan](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/terraform_plan.png)
 
 4. **Apply the configuration**
 
    ```bash
    terraform apply
    ```
+![terraform%20apply](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/terraform%20apply.png)   
 ![eks_cluster](https://github.com/prajeshgitre/devops-task/blob/3fba88c988bc89bb690f47057adcdb7e0d4e2402/images/eks_cluster.png)   
 
 5. **Get EKS Credentials**
@@ -243,9 +244,8 @@ kubectl apply -f k8s/deployment/service.yaml
 
 Access via port forwarding or node public IP.
 
-![Manual NGINX NodePort UI](images/nginx_nodeport_ui.png)
+![nginx_deployement_nodeport](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployement_nodeport.png)
 
----
 
 ## 🚀 Step 3: Install Argo CD on EKS
 
@@ -333,7 +333,7 @@ kubectl apply -f argo/argocd-app.yaml
 
 Once synced, your app will be deployed automatically by Argo CD.
 
-![NGINX Synced in Argo CD](images/nginx_app_synced.png)
+![nginx_deployment](https://github.com/prajeshgitre/devops-task/blob/3077416cb2adebd788b53a7788fcc58b0c76e840/images/nginx_deployment.png)
 
 -
 
